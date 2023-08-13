@@ -1,0 +1,153 @@
+﻿@model TestSmth2.Models.ViewModels.HomeViewModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> signInManager
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<div class="container col-xxl-8 px-4 py-5">
+    <div class="row align-items-center g-5 py-5">
+        <div class="col-12 col-lg-6">
+            <h1 class="display-5 fw-bold lh-1 mb-3">
+                Medical - Doctor's Best Friend'
+            </h1>
+            <p class="lead">
+                This platform enables it's users to view and edit test data, with the purpose of tracking antibiotic resistance'
+            </p>
+        </div>
+    </div>
+</div>
+
+@if (signInManager.IsSignedIn(User))
+{
+    <div class="container">
+        <h2 class="row justify-content-around">Antibiotics</h2>
+        <div class="row justify-content-center" style=" margin-bottom: 10px">
+            <div class="col-9" style="display: flex; flex-wrap: wrap;">
+                @if (Model != null && Model.antibiotics.Any())
+                {
+                    foreach (var tag in Model.antibiotics)
+                    {
+                        @if (tag.IsResistant == true)
+                        {
+                            <span class="badge bg-danger me-1 mb-1">
+                                @tag.name
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success me-1 mb-1">
+                                @tag.name
+                            </span>
+                        }
+                    }
+                }
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container">
+        <h2 class="row justify-content-around">Data Entries</h2>
+        <div class="row justify-content-around">
+            <div class="col">
+                @if (Model != null && Model.entries.Any())
+                {
+                    <select id="optionFilter" class="btn btn-secondary btn-light dropdown-toggle mb-1">
+                        <option value="0">ID</option>
+                        <option value="1">PatientCNP</option>
+                        <option value="2">Antibiotic/Resistance</option>
+                    </select>
+                    <input type="text" class="form-control me-2" aria-label="Search" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
+                    <table class="table" style="margin:0 auto" id="myTable">
+                        <thead>
+                            <tr>
+                                <td>Id</td>
+                                <td>Patient CNP</td>
+                                <td>Antibiotics</td>
+                                <td> </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var entry in Model.entries)
+                            {
+                                <tr>
+                                    <td>@entry.entryCode</td>
+                                    <td>
+                                        <div class="d-flex" style="margin:0 auto;white-space: nowrap;">
+                                            @entry.PatientCNP : @entry.Patient.PatientFirstName @entry.Patient.PatientLastName
+                                        </div>
+
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <div style=" display: flex; flex-wrap: wrap;">
+                                                @foreach (var tag in entry.Tags)
+                                                {
+                                                    @if (tag.IsResistant == true)
+                                                    {
+                                                        <span class="badge bg-danger me-1 mb-1">
+                                                            @tag.name
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge bg-success me-1 mb-1">
+                                                            @tag.name
+                                                        </span>
+                                                    }
+                                                }
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-dark"
+                                           asp-area=""
+                                           asp-controller="Entry"
+                                           asp-action="Index"
+                                           asp-route-urlHandle="@entry.URLHandle">Read More</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>
+                        No Entries Found!
+
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+}
+<script>
+    function myFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, j, txtValue, option;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        option = parseInt(document.getElementById("optionFilter").value);
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[option];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                console.log(txtValue);
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>

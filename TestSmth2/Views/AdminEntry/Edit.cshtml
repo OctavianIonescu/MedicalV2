@@ -1,0 +1,166 @@
+﻿@model TestSmth2.Models.ViewModels.BigView
+@{
+}
+<div class="py-2">
+    <div class="container">
+        <h1>Edit Entry - Admin Functionality</h1>
+    </div>
+</div>
+
+<div class="container py-5">
+    @if(Model != null)
+    {
+         <form method="post">
+
+            <div class="mb-3">
+                <label class="form-label">Id</label>
+                <input type="text" class="form-control" id="id" asp-for="OperateEntry.ID" readonly />
+            </div>
+
+        <div class="mb-3">
+            <label class="form-label">Cod Proba</label>
+                <input type="text" class="form-control" id="entryCode" asp-for="OperateEntry.entryCode" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">PatientCNP</label>
+                <input type="text" class="form-control" id="PatientCNP" asp-for="OperateEntry.PatientCNP" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Pathologic Product</label>
+                <textarea class="form-control" id="PathologicProduct" asp-for="OperateEntry.PathologicProduct"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Microbe</label>
+                <input type="text" class="form-control" id="Microbe" asp-for="OperateEntry.Microbe" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Comments</label>
+                <textarea class="form-control" id="shortDescription" asp-for="OperateEntry.shortDescription"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Featured Image Upload</label>
+            <input type="file" id="featuredImageUpload" class="form-control" />
+
+        </div>
+        <div class="mb-3">
+                @if (Model.OperateEntry.FileURL != null)
+                {
+                    <embed src=@Model.OperateEntry.FileURL id="featuredImageDisplay" width="100%" height="100%" />
+                }
+                else
+                {
+                    <embed src="" id="featuredImageDisplay" width="100%" height="100%" />
+                }
+                
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Featured Image URL</label>
+                <input type="text" class="form-control" id="featuredImageUrl" asp-for="OperateEntry.FileURL" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Collection Date</label>
+                <input type="date" class="form-control" id="collectionDate" asp-for="OperateEntry.collectionDate" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Validation Date</label>
+                <input type="date" class="form-control" id="validationDate" asp-for="OperateEntry.validationDate" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Origin(Sectia de provenienta)</label>
+                <input type="text" class="form-control" id="sectiaDeProvenienta" asp-for="OperateEntry.sectiaDeProvenienta" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Doctor</label>
+                <input type="text" class="form-control" id="medicSolicitant" asp-for="OperateEntry.medicSolicitant" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Tags</label>
+            <div class="card">
+                <div class="card-body">
+                        @foreach (var tag in Model.OperateEntry.Antibiotics)
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input fo" type="checkbox" name="SelectedAntibiotics" value="@tag.Value">
+                            <label class="form-check-label" for="@tag.Value">
+                                @tag.Text
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+
+            <div class="mb-3 d-flex">
+                <button type="submit" class="btn btn-dark">Update</button>
+
+                <button type="submit"
+                        class="btn btn-danger ms-2"
+                        asp-area=""
+                        asp-controller="AdminEntry"
+                        asp-action="Delete">
+                    Delete
+                </button>
+            </div>
+
+
+        </form>
+    }
+    else
+    {
+        <p>No tags Found!</p>
+    }
+</div>
+
+
+
+@section Scripts {
+    <script>
+        var editor = new FroalaEditor('#shortDescription', {
+            imageUploadURL: '/api/file'
+        });
+
+
+        const featuredUploadElement = document.getElementById('featuredImageUpload');
+        const featuredImageUrlElement = document.getElementById('featuredImageUrl');
+        const featuredImageDisplayElement = document.getElementById('featuredImageDisplay');
+
+
+        async function uploadFeaturedImage(e) {
+            console.log(e.target.files[0]);
+
+            let data = new FormData();
+            data.append('file', e.target.files[0]);
+
+            await fetch('/api/file', {
+                method: 'POST',
+                headers: {
+                    'Accept': '*/*'
+                },
+                body: data
+            }).then(response => response.json())
+                .then(result => {
+                    featuredImageUrlElement.value = result.link;
+                    featuredImageDisplayElement.src = result.link;
+                    featuredImageDisplayElement.style.display = 'block';
+                });
+
+        }
+
+
+        featuredUploadElement.addEventListener('change', uploadFeaturedImage);
+
+    </script>
+
+    }

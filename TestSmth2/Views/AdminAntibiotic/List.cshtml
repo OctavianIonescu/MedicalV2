@@ -1,0 +1,47 @@
+﻿@model List<TestSmth2.Models.Domain.AntiBiotic>
+@{
+}
+<div class="py-2">
+    <div class="container">
+        <h1>List Antibiotics - Admin Functionality</h1>
+    </div>
+</div>
+<div class="container py-5">
+    @if (Model != null && Model.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Is Resistent</th>
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var antibiotic in Model)
+                {
+                    <tr>
+                        <td>@antibiotic.ID</td>
+                        <td>@antibiotic.name</td>
+                        @if(antibiotic.IsResistant == false)
+                        {
+                            <td>No</td>
+                        }
+                        else
+                        {
+                            <td>Yes</td>
+                        }
+                        <td>
+                            <a asp-area="" asp-controller="AdminAntibiotic" asp-action="Edit" asp-route-id="@antibiotic.ID">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No Antibiotics Found!</p>
+    }
+</div>

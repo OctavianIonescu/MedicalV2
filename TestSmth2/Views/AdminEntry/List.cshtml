@@ -1,0 +1,69 @@
+﻿@model List<TestSmth2.Models.Domain.Entry>
+@{
+}
+<div class="py-2">
+    <div class="container">
+        <h1>All Entries - Admin Functionality</h1>
+    </div>
+</div>
+
+
+<div class="container py-5">
+    @if (Model != null && Model.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>Id</td>
+                    <td>Patient CNP</td>
+                    <td>Antibiotics</td>
+                    <td> </td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var entry in Model)
+                {
+                    <tr>
+                        <td>@entry.entryCode</td>
+                        <td>@entry.PatientCNP : @entry.Patient.PatientFirstName @entry.Patient.PatientLastName</td>
+                        <td>
+                            <div class="d-flex">
+                                @foreach (var tag in entry.Tags)
+                                {
+                                    <span class="badge bg-secondary me-1">@tag.name</span>
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            <a asp-area=""
+                               asp-controller="AdminEntry"
+                               asp-action="Edit"
+                               asp-route-id="@entry.ID">
+                                Edit
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>
+            No Entries Found!
+            
+        </p>
+        <form method="get">
+            <button type="submit"
+                    class="btn btn-dark btn-outline-info ms-2"
+                    asp-area=""
+                    asp-controller="AdminEntry"
+                    asp-action="Add">
+                Add new Entry
+            </button>
+        </form>
+
+
+    }
+
+</div>

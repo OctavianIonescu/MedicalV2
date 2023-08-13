@@ -1,0 +1,103 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> signInManager
+@inject UserManager<IdentityUser> userManager
+@model TestSmth2.Models.Domain.Entry
+@{
+}
+@{
+    ViewData["Title"] = Model.entryCode;
+}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-6">
+
+            @if (Model != null && signInManager.IsSignedIn(User))
+            {
+                <h1 class="mb-3">@Model.Patient.PatientFirstName @Model.Patient.PatientLastName (CNP: @Model.PatientCNP)</h1>
+
+                <div class="text-secondary">Origin(Sectia de Provenienta): @Model.sectiaDeProvenienta</div>
+                <div class="text-secondary">Collection date: @Model.collectionDate.ToShortDateString() Validation Date: @Model.validationDate</div>
+                
+                <div class="mb-3 d-flex">
+                    @foreach (var tag in Model.Tags)
+                    {
+                        <span class="badge bg-secondary me-1">@tag.name</span>
+                    }
+                </div>
+
+                <embed src=@Model.FileURL width="640px" height="800px" />
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5>About Entry:</h5>
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <h5><b>Entry Code:</b></h5>
+                            <p>@Model.entryCode</p>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5><b>Patient Details:</b></h5>
+                                <p><b>CNP:</b> @Model.PatientCNP</p>
+                                <p><b>First Name:</b> @Model.Patient.PatientFirstName</p>
+                                <p><b>Last Name:</b> @Model.Patient.PatientLastName</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5><b>Entry Request Details:</b></h5>
+                                <p><b>Pathologic Product</b> @Model.PathologicProduct</p>
+                                <p><b>Origin(Sectia de Provenienta):</b> @Model.sectiaDeProvenienta<p>
+                                <p><b>Soliciting Physician:</b> @Model.medicSolicitant</p>
+                                <p><b>Collection Date:</b> @Model.collectionDate</p>
+                                <p><b>Validation Date:</b> @Model.validationDate</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5><b>Antibiotic Details:</b></h5>
+                                <table class="table" style="color: black">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Is Resistant</th>
+                                            <th> </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var antibiotic in Model.Tags)
+                                        {
+                                            <tr>
+                                                <td>@antibiotic.name</td>
+                                                @if (antibiotic.IsResistant == false)
+                                                {
+                                                    <td>No</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>Yes</td>
+                                                }
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5><b>Notes and Comments:</b></h5>
+                                <p>@Html.Raw(Model.shortDescription)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <p>Blog post not found!</p>
+            }
+        </div>
+    </div>
+</div>
