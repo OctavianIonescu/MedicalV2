@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MedicalDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MedicalConnectionString")));
 builder.Services.AddDbContext<MedAuthDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MedAuthConnectionString")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<MedAuthDbContext>();
 builder.Services.AddControllersWithViews();

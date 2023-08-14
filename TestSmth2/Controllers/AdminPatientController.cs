@@ -2,9 +2,11 @@
 using TestSmth2.Models.ViewModels;
 using TestSmth2.Repos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TestSmth2.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminPatientController : Controller
     {
         private readonly IPatientRepo patientRepo;

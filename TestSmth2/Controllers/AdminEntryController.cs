@@ -6,9 +6,11 @@ using TestSmth2.Models.Domain;
 using TestSmth2.Repos;
 using static System.Runtime.CompilerServices.RuntimeHelpers;
 using System.Collections;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TestSmth2.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminEntryController : Controller
     {
         private readonly IEntryRepo entryRepo;

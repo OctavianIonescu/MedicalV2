@@ -3,9 +3,11 @@ using TestSmth2.Data;
 using Microsoft.AspNetCore.Identity;
 using TestSmth2.Repos;
 using TestSmth2.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TestSmth2.Controllers
 {
+    [Authorize(Roles = "User")]
     public class EntryController : Controller
     {
         private readonly SignInManager<IdentityUser> signInManager;
