@@ -61,6 +61,7 @@ namespace TestSmth2.Migrations.MedicalDb
                     sectiaDeProvenienta = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     shortDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     medicSolicitant = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     URLHandle = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FileURL = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     collectionDate = table.Column<DateTime>(type: "datetime2", nullable: false),

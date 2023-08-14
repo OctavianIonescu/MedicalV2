@@ -28,17 +28,17 @@
             <div class="col-9" style="display: flex; flex-wrap: wrap;">
                 @if (Model != null && Model.antibiotics.Any())
                 {
-                    foreach (var tag in Model.antibiotics)
+                    foreach (var tag in Model.antibiotics.OrderBy(s => s.name))
                     {
                         @if (tag.IsResistant == true)
                         {
-                            <span class="badge bg-danger me-1 mb-1">
+                            <span class="badge bg-danger me-1 mb-1" onclick="quickSearch('@tag.name')" style="cursor:pointer;">
                                 @tag.name
                             </span>
                         }
                         else
                         {
-                            <span class="badge bg-success me-1 mb-1">
+                            <span class="badge bg-success me-1 mb-1" onclick="quickSearch('@tag.name')" style="cursor:pointer;">
                                 @tag.name
                             </span>
                         }
@@ -58,12 +58,14 @@
                     <select id="optionFilter" class="btn btn-secondary btn-light dropdown-toggle mb-1">
                         <option value="0">ID</option>
                         <option value="1">PatientCNP</option>
-                        <option value="2">Antibiotic/Resistance</option>
+                        <option value="2">Infection/Colony</option>
+                        <option value="3">Antibiotic/Resistance</option>
+                        <option value="4">Resistance Mechanism</option>
                     </select>
                     <input type="text" class="form-control me-2" aria-label="Search" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
                     <h3 class="row justify-content-around">
                         <p>
-                            Total Number: <b id="count"></b>/<b id="totalCount"></b> (Number of search Results / Total number of Entries)
+                            Total Number: <b id="count"></b>/<b id="totalCount"></b> (Number of Search Results / Total number of Entries)
                         </p>
                     </h3>
                     <table class="table" style="margin:0 auto" id="myTable">
@@ -71,6 +73,7 @@
                             <tr>
                                 <td>Id</td>
                                 <td>Patient CNP</td>
+                                <td>Infection/Colony</td>
                                 <td>Antibiotics</td>
                                 <td>Resistance Mechanism</td>
                                 <td> </td>
@@ -88,9 +91,14 @@
 
                                     </td>
                                     <td>
+                                        <span class="badge bg-warning me-1 mb-1">
+                                            @entry.Type
+                                        </span>
+                                    </td>
+                                    <td>
                                         <div>
                                             <div style=" display: flex; flex-wrap: wrap;">
-                                                @foreach (var tag in entry.Tags)
+                                                @foreach (var tag in entry.Tags.OrderBy(s => s.name))
                                                 {
                                                     @if (tag.IsResistant == true)
                                                     {
@@ -112,7 +120,7 @@
                                     <td>
                                         <div>
                                             <div style=" display: flex; flex-wrap: wrap;">
-                                                @foreach (var tag in entry.Resistance)
+                                                @foreach (var tag in entry.Resistance.OrderBy(s => s.Name))
                                                 {
                                                     <span class="badge bg-info me-1 mb-1">
                                                         @tag.Name
@@ -151,6 +159,32 @@
     console.log("totalCount" + totalCount);
     document.querySelector('#totalCount').innerHTML = totalCount;
     document.querySelector('#count').innerHTML = count;
+
+    function quickSearch(arg) {
+        console.log(arg);
+        var filter, table, tr, td, i, txtValue;
+        filter = arg.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        count = 0;
+
+        for (var i = 1; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[3];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    count++;
+                    console.log("countin " + count);
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+        document.querySelector('#count').innerHTML = count;
+        count = 0;
+    }
+
     function myFunction() {
         // Declare variables
         var input, filter, table, tr, td, i, j, txtValue, option;
@@ -179,3 +213,5 @@
         count = 0;
     }
 </script>
+
+    

@@ -15,6 +15,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<MedAuthDbContext>();
 builder.Services.AddControllersWithViews();
 
+
 builder.Services.AddScoped<IAntiBioticRepo, AntiBioticRepo>();
 builder.Services.AddScoped<IEntryRepo, EntryRepo>();
 builder.Services.AddScoped<IFileRepo, CloudinaryFileRepo>();

@@ -17,7 +17,7 @@ namespace TestSmth2.Models.ViewModels
         public string PathologicProduct { get; set; }
 
         public string Microbe { get; set; }
-
+        public string Type { get; set; }
         public string sectiaDeProvenienta { get; set; }
 
         public string shortDescription { get; set; }

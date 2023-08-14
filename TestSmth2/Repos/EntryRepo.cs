@@ -57,6 +57,7 @@ namespace TestSmth2.Repos
                 target.shortDescription = entry.shortDescription;
                 target.medicSolicitant = entry.medicSolicitant;
                 target.FileURL = entry.FileURL;
+                target.Type = entry.Type;
                 target.URLHandle = entry.URLHandle;
                 target.collectionDate = entry.collectionDate;
                 target.validationDate = entry.validationDate;

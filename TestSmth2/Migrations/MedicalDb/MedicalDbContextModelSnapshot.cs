@@ -91,6 +91,10 @@ namespace TestSmth2.Migrations.MedicalDb
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("URLHandle")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

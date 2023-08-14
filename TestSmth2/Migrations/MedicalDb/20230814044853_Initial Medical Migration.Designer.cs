@@ -12,7 +12,7 @@ using TestSmth2.Data;
 namespace TestSmth2.Migrations.MedicalDb
 {
     [DbContext(typeof(MedicalDbContext))]
-    [Migration("20230814021259_Initial Medical Migration")]
+    [Migration("20230814044853_Initial Medical Migration")]
     partial class InitialMedicalMigration
     {
         /// <inheritdoc />
@@ -93,6 +93,10 @@ namespace TestSmth2.Migrations.MedicalDb
                     b.Property<string>("PatientCNP")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("URLHandle")
                         .IsRequired()

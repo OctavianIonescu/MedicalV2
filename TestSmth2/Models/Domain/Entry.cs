@@ -22,6 +22,8 @@ namespace TestSmth2.Models.Domain
         [Column]
         public string medicSolicitant { get; set; }
         [Column]
+        public string? Type { get; set;}
+        [Column]
         public string URLHandle { get; set; }
         [Column]
         public string? FileURL { get; set; }

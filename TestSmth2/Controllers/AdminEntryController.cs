@@ -43,7 +43,7 @@ namespace TestSmth2.Controllers
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> Add(BigView req, string[] SelectedAntibiotics, string[] SelectedResistance)
+        public async Task<IActionResult> Add(BigView req, string[] SelectedAntibiotics, string[] SelectedResistance, string SelectedType)
         {
             var patient = await patientRepo.GetAsync(req.Patient.PatientCNP);
             if(patient == null)
@@ -66,6 +66,7 @@ namespace TestSmth2.Controllers
                 shortDescription = req.OperateEntry.shortDescription,
                 medicSolicitant = req.OperateEntry.medicSolicitant,
                 URLHandle = req.OperateEntry.entryCode,
+                Type = SelectedType,
                 FileURL = req.OperateEntry.FileURL,
                 collectionDate = req.OperateEntry.collectionDate,
                 validationDate = req.OperateEntry.validationDate,
@@ -96,6 +97,7 @@ namespace TestSmth2.Controllers
             return RedirectToAction("Add");
         }
         [HttpGet]
+        [ActionName("EditGet")]
         public async Task<IActionResult> Edit(Guid ID)
         {
             var entry = await entryRepo.GetAsync(ID);
@@ -117,6 +119,7 @@ namespace TestSmth2.Controllers
                         medicSolicitant = entry.medicSolicitant,
                         URLHandle = entry.URLHandle,
                         FileURL = entry.FileURL,
+                        Type = entry.Type,
                         collectionDate = entry.collectionDate,
                         validationDate = entry.validationDate,
                         Antibiotics = antibioticList.Select(t => new SelectListItem { Text = t.name, Value = t.ID.ToString() }),
@@ -130,7 +133,8 @@ namespace TestSmth2.Controllers
             return View(null);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(BigView req, string[] SelectedAntibiotics, string[] SelectedResistance)
+        [ActionName("Edit")]
+        public async Task<IActionResult> Edit(BigView req, string[] SelectedAntibiotics, string[] SelectedResistance, string SelectedType)
         {
             var newEntry = new Entry
             {
@@ -142,6 +146,7 @@ namespace TestSmth2.Controllers
                 Microbe = req.OperateEntry.Microbe,
                 sectiaDeProvenienta = req.OperateEntry.sectiaDeProvenienta,
                 shortDescription = req.OperateEntry.shortDescription,
+                Type = SelectedType,
                 medicSolicitant = req.OperateEntry.medicSolicitant,
                 URLHandle = req.OperateEntry.entryCode,
                 FileURL = req.OperateEntry.FileURL,
@@ -159,6 +164,7 @@ namespace TestSmth2.Controllers
                     antibiotics.Add(existingAntibiotic);
                 }
             }
+            newEntry.Tags = antibiotics;
             var resistance = new List<ResistanceMechanism>();
             foreach (var item in SelectedResistance)
             {

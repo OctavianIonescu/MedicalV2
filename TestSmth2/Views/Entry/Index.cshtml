@@ -48,7 +48,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5><b>Entry Request Details:</b></h5>
-                                <p><b>Pathologic Product</b> @Model.PathologicProduct</p>
+                                <p><b>Pathologic Product: </b> @Model.PathologicProduct</p>
                                 <p><b>Origin(Sectia de Provenienta):</b> @Model.sectiaDeProvenienta<p>
                                 <p><b>Soliciting Physician:</b> @Model.medicSolicitant</p>
                                 <p><b>Collection Date:</b> @Model.collectionDate</p>
@@ -57,8 +57,21 @@
                         </div>
                         <div class="card">
                             <div class="card-body">
+                                <h5><b>Entry Microbe Details:</b></h5>
+                                <p><b>Microbe: </b> @Model.Microbe</p>
+                                <p><b>Type: </b> @Model.Type</p>
+                                <p><b>Resistance Mechanism: </b>
+                                    @foreach (var res in Model.Resistance)
+                                    {
+                                        @res.Name
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
                                 <h5><b>Antibiotic Details:</b></h5>
-                                <table class="table" style="color: black">
+                                <table class="table">
                                     <thead>
                                         <tr>
                                             <th>Name</th>

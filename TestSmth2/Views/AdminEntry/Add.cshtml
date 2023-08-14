@@ -41,6 +41,21 @@
         </div>
 
         <div class="mb-3">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="SelectedType" value="Colony">
+                <label class="form-check-label" for="Colony">
+                    Colony
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="SelectedType" value="Infection">
+                <label class="form-check-label" for="Infection">
+                    Infection
+                </label>
+            </div>
+        </div>
+
+        <div class="mb-3">
             <label class="form-label">Comment</label>
             <textarea class="form-control" id="shortDescription" asp-for="OperateEntry.shortDescription"></textarea>
         </div>
@@ -84,7 +99,7 @@
             <label class="form-label">Antibiotics and Resistance</label>
             <div class="card">
                 <div class="card-body">
-                    @foreach (var tag in Model.OperateEntry.Antibiotics)
+                    @foreach (var tag in Model.OperateEntry.Antibiotics.OrderBy(s => s.Text))
                     {
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="SelectedAntibiotics" value="@tag.Value">
@@ -101,7 +116,7 @@
             <label class="form-label">Resistance Mechanisms</label>
             <div class="card">
                 <div class="card-body">
-                    @foreach (var res in Model.OperateEntry.Resistance)
+                    @foreach (var res in Model.OperateEntry.Resistance.OrderBy(s => s.Text))
                     {
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="SelectedResistance" value="@res.Value">
@@ -165,6 +180,8 @@
     </script>
     <script>
         document.addEventListener("Save", function (event) {
+
+            
             var SelectedAntibiotics = [];
             var checkboxes = document.getElementsByName("SelectedAntibiotics");
             for (var i = 0; i < checkboxes.length; i++) {
@@ -173,6 +190,7 @@
                 }
             }
             @Model.OperateEntry.SelectedAntibiotics = SelectedAntibiotics;
+
             var SelectedResistance = [];
             var checkboxes1 = document.getElementsByName("SelectedResistance");
             for (var i = 0; i < checkboxes1.length; i++) {
@@ -180,7 +198,10 @@
                     SelectedResistance.push(checkboxes1[i].value);
                 }
             }
-        @Model.OperateEntry.SelectedResistance = SelectedResistance;
+            @Model.OperateEntry.SelectedResistance = SelectedResistance;
+
+
+
         });
     </script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>

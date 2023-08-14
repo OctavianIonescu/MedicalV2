@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
 using TestSmth2.ValidationTags;
 
 namespace TestSmth2.Models.ViewModels
 {
-    public class RegisterViewModel
+    public class RegisterViewModel: PageModel
     {
         [Required]
         public string Username { get; set; }
