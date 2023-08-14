@@ -61,12 +61,18 @@
                         <option value="2">Antibiotic/Resistance</option>
                     </select>
                     <input type="text" class="form-control me-2" aria-label="Search" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
+                    <h3 class="row justify-content-around">
+                        <p>
+                            Total Number: <b id="count"></b>/<b id="totalCount"></b> (Number of search Results / Total number of Entries)
+                        </p>
+                    </h3>
                     <table class="table" style="margin:0 auto" id="myTable">
                         <thead>
                             <tr>
                                 <td>Id</td>
                                 <td>Patient CNP</td>
                                 <td>Antibiotics</td>
+                                <td>Resistance Mechanism</td>
                                 <td> </td>
                             </tr>
                         </thead>
@@ -104,6 +110,18 @@
                                         </div>
                                     </td>
                                     <td>
+                                        <div>
+                                            <div style=" display: flex; flex-wrap: wrap;">
+                                                @foreach (var tag in entry.Resistance)
+                                                {
+                                                    <span class="badge bg-info me-1 mb-1">
+                                                        @tag.Name
+                                                    </span>
+                                                }
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
                                         <a class="btn btn-dark"
                                            asp-area=""
                                            asp-controller="Entry"
@@ -127,6 +145,12 @@
     </div>
 }
 <script>
+    var count = @Model.entries.ToArray().Length;
+    console.log("count" + count);
+    var totalCount = @Model.entries.ToArray().Length;
+    console.log("totalCount" + totalCount);
+    document.querySelector('#totalCount').innerHTML = totalCount;
+    document.querySelector('#count').innerHTML = count;
     function myFunction() {
         // Declare variables
         var input, filter, table, tr, td, i, j, txtValue, option;
@@ -135,19 +159,23 @@
         table = document.getElementById("myTable");
         tr = table.getElementsByTagName("tr");
         option = parseInt(document.getElementById("optionFilter").value);
+        count = 0;
 
         // Loop through all table rows, and hide those who don't match the search query
-        for (i = 0; i < tr.length; i++) {
+        for (i = 1; i < tr.length; i++) {
             td = tr[i].getElementsByTagName("td")[option];
             if (td) {
                 txtValue = td.textContent || td.innerText;
-                console.log(txtValue);
                 if (txtValue.toUpperCase().indexOf(filter) > -1) {
                     tr[i].style.display = "";
+                    count++;
+                    console.log("countin " + count);
                 } else {
                     tr[i].style.display = "none";
                 }
             }
         }
+        document.querySelector('#count').innerHTML = count;
+        count = 0;
     }
 </script>

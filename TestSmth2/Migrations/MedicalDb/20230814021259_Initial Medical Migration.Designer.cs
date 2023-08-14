@@ -12,7 +12,7 @@ using TestSmth2.Data;
 namespace TestSmth2.Migrations.MedicalDb
 {
     [DbContext(typeof(MedicalDbContext))]
-    [Migration("20230813030500_Initial Medical Migration")]
+    [Migration("20230814021259_Initial Medical Migration")]
     partial class InitialMedicalMigration
     {
         /// <inheritdoc />
@@ -38,6 +38,21 @@ namespace TestSmth2.Migrations.MedicalDb
                     b.HasIndex("TagsID");
 
                     b.ToTable("AntiBioticEntry");
+                });
+
+            modelBuilder.Entity("EntryResistanceMechanism", b =>
+                {
+                    b.Property<Guid>("EntriesID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ResistanceID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("EntriesID", "ResistanceID");
+
+                    b.HasIndex("ResistanceID");
+
+                    b.ToTable("EntryResistanceMechanism");
                 });
 
             modelBuilder.Entity("TestSmth2.Models.Domain.AntiBiotic", b =>
@@ -129,6 +144,21 @@ namespace TestSmth2.Migrations.MedicalDb
                     b.ToTable("Patients");
                 });
 
+            modelBuilder.Entity("TestSmth2.Models.Domain.ResistanceMechanism", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("ResistanceMechanisms");
+                });
+
             modelBuilder.Entity("AntiBioticEntry", b =>
                 {
                     b.HasOne("TestSmth2.Models.Domain.Entry", null)
@@ -140,6 +170,21 @@ namespace TestSmth2.Migrations.MedicalDb
                     b.HasOne("TestSmth2.Models.Domain.AntiBiotic", null)
                         .WithMany()
                         .HasForeignKey("TagsID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EntryResistanceMechanism", b =>
+                {
+                    b.HasOne("TestSmth2.Models.Domain.Entry", null)
+                        .WithMany()
+                        .HasForeignKey("EntriesID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TestSmth2.Models.Domain.ResistanceMechanism", null)
+                        .WithMany()
+                        .HasForeignKey("ResistanceID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

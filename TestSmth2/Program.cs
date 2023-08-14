@@ -20,6 +20,7 @@ builder.Services.AddScoped<IEntryRepo, EntryRepo>();
 builder.Services.AddScoped<IFileRepo, CloudinaryFileRepo>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IPatientRepo, PatientRepo>();
+builder.Services.AddScoped<IResistanceRepo, ResistanceRepo>();
 
 var app = builder.Build();
 

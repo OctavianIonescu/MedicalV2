@@ -14,5 +14,6 @@ namespace TestSmth2.Data
         public DbSet<Entry> Entries { get; set; }
         public DbSet<AntiBiotic> AntiBiotics { get; set; }
         public DbSet<Patient> Patients { get; set; }
+        public DbSet<ResistanceMechanism> ResistanceMechanisms { get; set; }
     }
 }

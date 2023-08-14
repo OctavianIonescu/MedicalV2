@@ -32,22 +32,22 @@ namespace TestSmth2.Repos
 
         public async Task<IEnumerable<Entry>> GetAllAsync()
         {
-            return await context.Entries.Include(x => x.Tags).Include(y => y.Patient).ToListAsync();
+            return await context.Entries.Include(x => x.Tags).Include(y => y.Patient).Include(z => z.Resistance).ToListAsync();
         }
 
         public async Task<Entry> GetAsync(Guid ID)
         {
-            return await context.Entries.Include(x => x.Tags).FirstOrDefaultAsync(x => x.ID == ID);
+            return await context.Entries.Include(x => x.Tags).Include(y => y.Patient).Include(z => z.Resistance).FirstOrDefaultAsync(x => x.ID == ID);
         }
 
         public async Task<Entry> GetByURLAsync(string URLHandle)
         {
-            return await context.Entries.Include(x => x.Tags).Include(y => y.Patient).FirstOrDefaultAsync(x => x.URLHandle == URLHandle);
+            return await context.Entries.Include(x => x.Tags).Include(y => y.Patient).Include(z => z.Resistance).FirstOrDefaultAsync(x => x.URLHandle == URLHandle);
         }
 
         public async Task<Entry> UpdateAsync(Entry entry)
         {
-            var target = await context.Entries.Include(x => x.Tags).FirstOrDefaultAsync(y => y.ID == entry.ID);
+            var target = await context.Entries.Include(x => x.Tags).Include(y => y.Patient).Include(z => z.Resistance).FirstOrDefaultAsync(y => y.ID == entry.ID);
             if (target != null)
             {
                 target.ID = entry.ID;
@@ -61,6 +61,7 @@ namespace TestSmth2.Repos
                 target.collectionDate = entry.collectionDate;
                 target.validationDate = entry.validationDate;
                 target.Tags = entry.Tags;
+                target.Resistance = entry.Resistance;
                 await context.SaveChangesAsync();
                 return target;
             }

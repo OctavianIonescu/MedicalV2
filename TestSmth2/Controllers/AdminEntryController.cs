@@ -16,30 +16,34 @@ namespace TestSmth2.Controllers
         private readonly IEntryRepo entryRepo;
         private readonly IAntiBioticRepo antibioticRepo;
         private readonly IPatientRepo patientRepo;
+        private readonly IResistanceRepo resistanceRepo;
 
-        public AdminEntryController(IEntryRepo entryRepo, IAntiBioticRepo antibioticRepo, IPatientRepo patientRepo)
+        public AdminEntryController(IEntryRepo entryRepo, IAntiBioticRepo antibioticRepo, IPatientRepo patientRepo, IResistanceRepo resistanceRepo)
         {
             this.entryRepo = entryRepo;
             this.antibioticRepo = antibioticRepo;
             this.patientRepo = patientRepo;
+            this.resistanceRepo = resistanceRepo;
         }
 
         [HttpGet]
         public async Task<IActionResult> Add()
         {
             var Antibiotics = await antibioticRepo.GetAllAsync();
+            var ResistanceMechanisms = await resistanceRepo.GetAllAsync();
 
             var model = new BigView()
             {
                 OperateEntry = new OperateEntryRequest
                 {
-                    Antibiotics = Antibiotics.Select(x => new SelectListItem { Text = x.name, Value = x.ID.ToString() })
+                    Antibiotics = Antibiotics.Select(x => new SelectListItem { Text = x.name, Value = x.ID.ToString() }),
+                    Resistance = ResistanceMechanisms.Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() })
                 },
             };
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> Add(BigView req, string[] SelectedAntibiotics)
+        public async Task<IActionResult> Add(BigView req, string[] SelectedAntibiotics, string[] SelectedResistance)
         {
             var patient = await patientRepo.GetAsync(req.Patient.PatientCNP);
             if(patient == null)
@@ -77,6 +81,17 @@ namespace TestSmth2.Controllers
                 }
             }
             newEntry.Tags = antibiotics;
+            var resistance = new List<ResistanceMechanism>();
+            foreach (var item in SelectedResistance)
+            {
+                var itemGuid = Guid.Parse(item);
+                var existingResistance = await resistanceRepo.GetAsync(itemGuid);
+                if (existingResistance != null)
+                {
+                    resistance.Add(existingResistance);
+                }
+            }
+            newEntry.Resistance = resistance;
             await entryRepo.AddAsync(newEntry);
             return RedirectToAction("Add");
         }
@@ -85,6 +100,7 @@ namespace TestSmth2.Controllers
         {
             var entry = await entryRepo.GetAsync(ID);
             var antibioticList = await antibioticRepo.GetAllAsync();
+            var resistanceList = await resistanceRepo.GetAllAsync();
             if (entry != null)
             {
                 var model = new BigView
@@ -104,7 +120,9 @@ namespace TestSmth2.Controllers
                         collectionDate = entry.collectionDate,
                         validationDate = entry.validationDate,
                         Antibiotics = antibioticList.Select(t => new SelectListItem { Text = t.name, Value = t.ID.ToString() }),
-                        SelectedAntibiotics = entry.Tags.Select(x => x.ID.ToString()).ToArray()
+                        SelectedAntibiotics = entry.Tags.Select(x => x.ID.ToString()).ToArray(),
+                        Resistance = resistanceList.Select(t => new SelectListItem { Text = t.Name, Value = t.ID.ToString() }),
+                        SelectedResistance = entry.Resistance.Select(x => x.ID.ToString()).ToArray()
                     }
                 };
                 return View(model);
@@ -112,7 +130,7 @@ namespace TestSmth2.Controllers
             return View(null);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(BigView req, string[] SelectedAntibiotics)
+        public async Task<IActionResult> Edit(BigView req, string[] SelectedAntibiotics, string[] SelectedResistance)
         {
             var newEntry = new Entry
             {
@@ -141,7 +159,17 @@ namespace TestSmth2.Controllers
                     antibiotics.Add(existingAntibiotic);
                 }
             }
-            newEntry.Tags = antibiotics;
+            var resistance = new List<ResistanceMechanism>();
+            foreach (var item in SelectedResistance)
+            {
+                var itemGuid = Guid.Parse(item);
+                var existingResistance = await resistanceRepo.GetAsync(itemGuid);
+                if (existingResistance != null)
+                {
+                    resistance.Add(existingResistance);
+                }
+            }
+            newEntry.Resistance = resistance;
             var x = newEntry.ID;
             var updateList = await entryRepo.UpdateAsync(newEntry);
             if(updateList != null)

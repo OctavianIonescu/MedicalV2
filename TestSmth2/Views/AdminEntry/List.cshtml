@@ -27,10 +27,31 @@
                         <td>@entry.entryCode</td>
                         <td>@entry.PatientCNP : @entry.Patient.PatientFirstName @entry.Patient.PatientLastName</td>
                         <td>
-                            <div class="d-flex">
+                            <div class="d-flex" style="display: flex; flex-wrap: wrap;">
                                 @foreach (var tag in entry.Tags)
                                 {
-                                    <span class="badge bg-secondary me-1">@tag.name</span>
+                                    @if (tag.IsResistant == true)
+                                    {
+                                        <span class="badge bg-danger me-1 mb-1">
+                                            @tag.name
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success me-1 mb-1">
+                                            @tag.name
+                                        </span>
+                                    }
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex" style="display: flex; flex-wrap: wrap;">
+                                @foreach (var tag in entry.Resistance)
+                                {
+                                    <span class="badge bg-info me-1 mb-1">
+                                        @tag.Name
+                                    </span>
                                 }
                             </div>
                         </td>

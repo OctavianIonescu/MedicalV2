@@ -1,0 +1,38 @@
+﻿@model List<TestSmth2.Models.Domain.ResistanceMechanism>
+@{
+}
+<div class="py-2">
+    <div class="container">
+        <h1>List Resistances - Admin Functionality</h1>
+    </div>
+</div>
+<div class="container py-5">
+    @if (Model != null && Model.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var resistance in Model)
+                {
+                    <tr>
+                        <td>@resistance.ID</td>
+                        <td>@resistance.Name</td>
+                        <td>
+                            <a asp-area="" asp-controller="AdminResistance" asp-action="Edit" asp-route-id="@resistance.ID">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No resistances Found!</p>
+    }
+</div>

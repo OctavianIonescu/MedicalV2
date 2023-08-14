@@ -38,6 +38,18 @@ namespace TestSmth2.Migrations.MedicalDb
                 });
 
             migrationBuilder.CreateTable(
+                name: "ResistanceMechanisms",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ResistanceMechanisms", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Entries",
                 columns: table => new
                 {
@@ -89,6 +101,30 @@ namespace TestSmth2.Migrations.MedicalDb
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "EntryResistanceMechanism",
+                columns: table => new
+                {
+                    EntriesID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ResistanceID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EntryResistanceMechanism", x => new { x.EntriesID, x.ResistanceID });
+                    table.ForeignKey(
+                        name: "FK_EntryResistanceMechanism_Entries_EntriesID",
+                        column: x => x.EntriesID,
+                        principalTable: "Entries",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EntryResistanceMechanism_ResistanceMechanisms_ResistanceID",
+                        column: x => x.ResistanceID,
+                        principalTable: "ResistanceMechanisms",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AntiBioticEntry_TagsID",
                 table: "AntiBioticEntry",
@@ -98,6 +134,11 @@ namespace TestSmth2.Migrations.MedicalDb
                 name: "IX_Entries_PatientCNP",
                 table: "Entries",
                 column: "PatientCNP");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntryResistanceMechanism_ResistanceID",
+                table: "EntryResistanceMechanism",
+                column: "ResistanceID");
         }
 
         /// <inheritdoc />
@@ -107,10 +148,16 @@ namespace TestSmth2.Migrations.MedicalDb
                 name: "AntiBioticEntry");
 
             migrationBuilder.DropTable(
+                name: "EntryResistanceMechanism");
+
+            migrationBuilder.DropTable(
                 name: "AntiBiotics");
 
             migrationBuilder.DropTable(
                 name: "Entries");
+
+            migrationBuilder.DropTable(
+                name: "ResistanceMechanisms");
 
             migrationBuilder.DropTable(
                 name: "Patients");

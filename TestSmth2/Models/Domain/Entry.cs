@@ -31,6 +31,8 @@ namespace TestSmth2.Models.Domain
         public DateTime validationDate { get; set; }
         [Column]
         public ICollection<AntiBiotic> Tags { get; set; }
+        public ICollection<ResistanceMechanism> Resistance { get; set; }
+
         public Entry() { }
 
     }

@@ -33,7 +33,9 @@ namespace TestSmth2.Models.ViewModels
         public DateTime validationDate { get; set; }
 
         public IEnumerable<SelectListItem> Antibiotics { get; set; }
-        public string[] SelectedAntibiotics { get; set; } = Array.Empty<string>();
+        public IEnumerable<SelectListItem> Resistance { get; set; }
 
+        public string[] SelectedAntibiotics { get; set; } = Array.Empty<string>();
+        public string[] SelectedResistance { get; set; } = Array.Empty<string>();
     }
 }
